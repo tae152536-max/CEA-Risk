@@ -273,7 +273,7 @@ if 'psa_df' in st.session_state:
     
     with tab1:
         st.pyplot(plot_ceac(psa_df, max_wtp_ceac))
-        st.markdown(f"Shows the probability that the new intervention is cost-effective from $0 to user-selected ${max_wtp_ceac:,.0f} WTP.")
+        st.markdown(f"Shows the probability that each strategy is cost-effective from $0 to user-selected ${max_wtp_ceac:,.0f} WTP.")
         
     with tab2:
         st.pyplot(plot_ce_plane(psa_df, wtp))

@@ -62,18 +62,23 @@ def plot_ce_plane(psa_df, wtp):
 def plot_ceac(psa_df, max_wtp=150000):
     """Plots the Cost-Effectiveness Acceptability Curve (CEAC)"""
     wtp_range = np.linspace(0, max_wtp, 151)
-    ceac_probabilities = []
+    new_probs = []
+    std_probs = []
     for wtp in wtp_range:
         inmb = (psa_df['Inc_QALY'] * wtp) - psa_df['Inc_Cost']
-        prob_ce = (inmb > 0).mean()
-        ceac_probabilities.append(prob_ce)
+        prob_new = (inmb > 0).mean()
+        new_probs.append(prob_new)
+        std_probs.append(1 - prob_new)
         
     fig, ax = plt.subplots(figsize=(8, 5))
-    ax.plot(wtp_range, ceac_probabilities, color='#2ecc71', linewidth=2.5)
+    ax.plot(wtp_range, new_probs, color='#2ecc71', linewidth=2.5, label='New Intervention')
+    ax.plot(wtp_range, std_probs, color='#3498db', linewidth=2.5, label='Standard Care')
+    
     ax.set_title('Cost-Effectiveness Acceptability Curve', fontweight='bold', pad=15)
     ax.set_xlabel('Willingness To Pay (Threshold $/QALY)')
     ax.set_ylabel('Probability Cost-Effective')
     ax.set_ylim([0, 1.05])
+    ax.legend(frameon=False)
     ax.grid(True, alpha=0.15, linestyle=':')
     sns.despine(ax=ax)
     return fig
