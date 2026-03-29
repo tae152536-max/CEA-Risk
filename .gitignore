@@ -1,0 +1,10 @@
+.env
+venv/
+env/
+__pycache__/
+*.pyc
+link.txt
+link2.txt
+link3.txt
+*.xlsx
+.DS_Store
