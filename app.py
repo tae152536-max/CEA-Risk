@@ -91,16 +91,16 @@ def df_to_cost_list(df):
         cost_list.append(c_dict)
     return cost_list
 
-# SIDEBAR: Parameters
-st.sidebar.header("Model Parameters")
-n_cycles = st.sidebar.slider("Time Horizon (Years/Cycles)", min_value=1, max_value=50, value=20)
-wtp = st.sidebar.number_input("Willingness To Pay (WTP/QALY)", min_value=1000, max_value=250000, value=50000, step=5000)
-discount_rate = st.sidebar.slider("Discount Rate", min_value=0.0, max_value=0.10, value=0.03, step=0.01)
-
-st.sidebar.markdown("---")
-st.sidebar.subheader("Risk Settings (CEAC)")
-max_wtp_ceac = st.sidebar.slider("Max WTP on CEAC Plot", min_value=50000, max_value=500000, value=150000, step=10000)
-n_simulations = st.sidebar.number_input("Number of Simulations (PSA)", min_value=100, max_value=10000, value=1000, step=100)
+st.header("Global Configuration & Parameters")
+with st.expander("⚙️ Open to Set Global Parameters, WTP, and Horizon", expanded=True):
+    col_a, col_b = st.columns(2)
+    with col_a:
+        n_cycles = st.slider("Time Horizon (Years/Cycles)", min_value=1, max_value=50, value=20)
+        wtp = st.number_input("Willingness To Pay (WTP/QALY)", min_value=1000, max_value=250000, value=50000, step=5000)
+        discount_rate = st.slider("Discount Rate", min_value=0.0, max_value=0.10, value=0.03, step=0.01)
+    with col_b:
+        max_wtp_ceac = st.slider("Max WTP on CEAC Plot", min_value=50000, max_value=500000, value=150000, step=10000)
+        n_simulations = st.number_input("Number of Simulations (PSA)", min_value=100, max_value=10000, value=1000, step=100)
 
 st.subheader("Dynamic Cost Inputs")
 st.markdown("Add up to 10 lines per state/subgroup! Select a specific statistical distribution for each item's Probabilistic Risk Analysis.")
@@ -133,25 +133,26 @@ with tab_ni:
         key="ni_costs"
     )
 
-st.sidebar.subheader("Transition Probabilities")
-st.sidebar.markdown("**Standard Care**")
-std_prob_event = st.sidebar.slider("Prob (Well -> Post-Event)", value=0.10, min_value=0.0, max_value=1.0, key="s1")
-std_prob_dead_w = st.sidebar.slider("Prob (Well -> Dead)", value=0.02, min_value=0.0, max_value=1.0, key="s2")
-std_prob_dead_p = st.sidebar.slider("Prob (Post-Event -> Dead)", value=0.15, min_value=0.0, max_value=1.0, key="s3")
-
-st.sidebar.markdown("**New Intervention**")
-new_prob_event = st.sidebar.slider("Prob (Well -> Post-Event) ", value=0.05, min_value=0.0, max_value=1.0, key="n5")
-new_prob_dead_w = st.sidebar.slider("Prob (Well -> Dead) ", value=0.02, min_value=0.0, max_value=1.0, key="n6")
-new_prob_dead_p = st.sidebar.slider("Prob (Post-Event -> Dead) ", value=0.10, min_value=0.0, max_value=1.0, key="n7")
-
-st.sidebar.subheader("Utilities (QALYs)")
-st.sidebar.markdown("**Standard Care**")
-std_qaly_well = st.sidebar.number_input("QALY - Well (Std)", value=0.95, min_value=0.0, max_value=1.0)
-std_qaly_post = st.sidebar.number_input("QALY - Post-Event (Std)", value=0.75, min_value=0.0, max_value=1.0)
-
-st.sidebar.markdown("**New Intervention**")
-new_qaly_well = st.sidebar.number_input("QALY - Well (New)", value=0.95, min_value=0.0, max_value=1.0)
-new_qaly_post = st.sidebar.number_input("QALY - Post-Event (New)", value=0.80, min_value=0.0, max_value=1.0)
+st.markdown("---")
+st.header("Transition Probabilities & Utilities")
+with st.expander("🔄 Open to Set Transition Probabilities & Utilities", expanded=True):
+    col_std, col_new = st.columns(2)
+    with col_std:
+        st.markdown("#### Standard Care")
+        std_prob_event = st.slider("Prob (Well -> Post-Event)", value=0.10, min_value=0.0, max_value=1.0, key="s1")
+        std_prob_dead_w = st.slider("Prob (Well -> Dead)", value=0.02, min_value=0.0, max_value=1.0, key="s2")
+        std_prob_dead_p = st.slider("Prob (Post-Event -> Dead)", value=0.15, min_value=0.0, max_value=1.0, key="s3")
+        st.markdown("##### Utilities (QALYs)")
+        std_qaly_well = st.number_input("QALY - Well (Std)", value=0.95, min_value=0.0, max_value=1.0)
+        std_qaly_post = st.number_input("QALY - Post-Event (Std)", value=0.75, min_value=0.0, max_value=1.0)
+    with col_new:
+        st.markdown("#### New Intervention")
+        new_prob_event = st.slider("Prob (Well -> Post-Event) ", value=0.05, min_value=0.0, max_value=1.0, key="n5")
+        new_prob_dead_w = st.slider("Prob (Well -> Dead) ", value=0.02, min_value=0.0, max_value=1.0, key="n6")
+        new_prob_dead_p = st.slider("Prob (Post-Event -> Dead) ", value=0.10, min_value=0.0, max_value=1.0, key="n7")
+        st.markdown("##### Utilities (QALYs)")
+        new_qaly_well = st.number_input("QALY - Well (New)", value=0.95, min_value=0.0, max_value=1.0)
+        new_qaly_post = st.number_input("QALY - Post-Event (New)", value=0.80, min_value=0.0, max_value=1.0)
 
 def build_p_matrix(p_event, p_dead_w, p_dead_p):
     p_well = max(0, 1 - p_event - p_dead_w)
