@@ -14,44 +14,118 @@ st.set_page_config(page_title="Cardiovascular CEA Model", layout="wide", initial
 
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    html, body, [class*="css"] { font-family: 'Inter', sans-serif !important; }
+    /* Clean SaaS Dashboard Theme with Minimal Color Cards */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
     
+    html, body, [class*="css"] { 
+        font-family: 'Inter', sans-serif !important; 
+        color: #374151 !important;
+        font-size: 14px !important; 
+    }
+    
+    /* Light Grey Dashboard Canvas */
+    .stApp { background-color: #f3f4f6 !important; }
+    
+    /* Clean Typography */
+    h1 { 
+        font-size: 1.8rem !important; 
+        color: #111827 !important; 
+        font-weight: 500 !important; 
+        border-bottom: none !important; 
+        margin-bottom: 20px; 
+    }
+    h2 { 
+        font-size: 1.4rem !important; 
+        color: #111827 !important; 
+        font-weight: 600 !important; 
+        margin-top: 30px; 
+        margin-bottom: 15px; 
+    }
+    h3, h4, h5 { 
+        font-size: 1.1rem !important; 
+        color: #374151 !important; 
+        font-weight: 600 !important; 
+    }
+    
+    /* Hide Native Clutter */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    .block-container { padding-top: 2rem; padding-bottom: 2rem; }
     
-    [data-testid="stSidebar"] { background-color: #f8f9fa !important; border-right: 1px solid #e9ecef; }
+    /* Central Dashboard Page */
+    .block-container { 
+        padding-top: 2rem; 
+        padding-bottom: 3rem; 
+        max-width: 90% !important; 
+    }
     
-    [data-testid="stMetric"] { background-color: #ffffff; border-radius: 8px; padding: 15px 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); border: 1px solid #f0f2f6; text-align: center; }
-    [data-testid="stMetricValue"] { font-weight: 700; color: #2c3e50; font-size: 1.8rem !important; }
-    [data-testid="stMetricLabel"] { font-weight: 600; color: #7f8c8d; font-size: 0.9rem !important; margin-bottom: 5px; }
+    /* Pure White Sidebar */
+    [data-testid="stSidebar"] { 
+        background-color: #ffffff !important; 
+        border-right: 1px solid #e5e7eb !important; 
+    }
     
-    .stButton>button { border-radius: 6px; font-weight: 600; transition: all 0.2s ease; font-family: 'Inter', sans-serif !important; letter-spacing: 0.5px; }
-    .stButton>button:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+    /* MINIMAL CARDS REMOVED - Dynamic Inline Styles Handled in Python */
+    
+    /* Primary Action Buttons */
+    .stButton>button { 
+        background-color: #2563eb !important; /* Royal Blue */
+        border: none !important;
+        color: #ffffff !important;
+        border-radius: 4px !important; 
+        font-weight: 500 !important; 
+        font-size: 0.9rem !important;
+        padding: 0.4rem 1.2rem !important;
+        box-shadow: none !important;
+        transition: background-color 0.2s;
+    }
+    .stButton>button:hover { 
+        background-color: #1d4ed8 !important;
+    }
+    
+    /* Clean Minimal Tabs */
+    .stTabs [data-baseweb="tab-list"] { 
+        border-bottom: 1px solid #e5e7eb;
+        gap: 20px; 
+    }
+    .stTabs [data-baseweb="tab"] { 
+        background-color: transparent !important; 
+        border-radius: 0; 
+        border-bottom: 2px solid transparent; 
+        padding: 8px 4px; 
+        font-weight: 500; 
+        font-size: 0.95rem;
+        color: #6b7280;
+    }
+    .stTabs [aria-selected="true"] { 
+        color: #2563eb !important; 
+        border-bottom-color: #2563eb !important; 
+    }
+    
+    /* Inputs */
+    .stSlider > div[data-baseweb="slider"] { padding-top: 5px; }
+    .stNumberInput > div[data-baseweb="input"] { 
+        border-radius: 4px !important; 
+        border: 1px solid #d1d5db !important; 
+        background-color: #ffffff !important;
+    }
+    
+    /* Data Editor Overrides for White Flat Look */
+    [data-testid="stDataFrame"] {
+        border-radius: 6px !important;
+        border: 1px solid #e5e7eb !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    }
+    
+    /* Expander Overrides */
+    [data-testid="stExpander"] {
+        background-color: #ffffff !important;
+        border-radius: 6px !important;
+        border: 1px solid #e5e7eb !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+        overflow: hidden;
+    }
 </style>
 """, unsafe_allow_html=True)
-
-# --- INTERNAL SECURITY GATE ---
-ACCESS_CODE = "HealthEcon2026"
-
-if "authenticated" not in st.session_state:
-    st.session_state["authenticated"] = False
-
-if not st.session_state["authenticated"]:
-    st.title("🔒 Confidential Internal Dashboard")
-    st.markdown("This Cost-Effectiveness Model contains proprietary baseline analytics. Please enter your Internal Access Code to decrypt the mathematical engine.")
-    
-    pwd = st.text_input("Enter Access Code:", type="password")
-    
-    if pwd == ACCESS_CODE:
-        st.session_state["authenticated"] = True
-        st.rerun()
-    elif pwd != "":
-        st.error("❌ Incorrect Access Code. Connection refused.")
-    
-    st.stop() # Physically halts the entire Streamlit engine from rendering the rest of the file
-# ------------------------------
 
 st.title("Cardiovascular Cost-Effectiveness Risk Analysis Model")
 st.markdown("""
@@ -59,28 +133,28 @@ This application compares two strategies: **Standard Care** vs. **New Interventi
 It uses a 3-State Markov Model (**Well, Post-Event, Dead**) and quantifies risk via **Probabilistic Sensitivity Analysis (PSA)**.
 """)
 
-def get_default_costs(strategy):
+def get_default_costs(strategy, states):
+    s1, s2, s3 = states
     if strategy == 'Standard':
          return pd.DataFrame([
-             {"State": "Well", "Subgroup": "Medical", "Item": "Routine Visit", "Cost ($/year)": 400.0, "Distribution": "Gamma", "SE/SD": 60.0},
-             {"State": "Well", "Subgroup": "Non-Medical", "Item": "Transport", "Cost ($/year)": 50.0, "Distribution": "Fixed", "SE/SD": 0.0},
-             {"State": "Well", "Subgroup": "Indirect", "Item": "Time lost", "Cost ($/year)": 50.0, "Distribution": "Fixed", "SE/SD": 0.0},
-             {"State": "Post-Event", "Subgroup": "Medical", "Item": "Hospitalization", "Cost ($/year)": 4000.0, "Distribution": "Gamma", "SE/SD": 600.0},
-             {"State": "Post-Event", "Subgroup": "Non-Medical", "Item": "Rehab", "Cost ($/year)": 500.0, "Distribution": "Gamma", "SE/SD": 75.0},
-             {"State": "Post-Event", "Subgroup": "Indirect", "Item": "Work lost", "Cost ($/year)": 500.0, "Distribution": "Normal", "SE/SD": 50.0},
+             {"State": s1, "Subgroup": "Medical", "Item": "Routine Visit", "Cost ($/year)": 400.0, "Distribution": "Gamma", "SE/SD": 60.0},
+             {"State": s1, "Subgroup": "Non-Medical", "Item": "Transport", "Cost ($/year)": 50.0, "Distribution": "Fixed", "SE/SD": 0.0},
+             {"State": s1, "Subgroup": "Indirect", "Item": "Time lost", "Cost ($/year)": 50.0, "Distribution": "Fixed", "SE/SD": 0.0},
+             {"State": s2, "Subgroup": "Medical", "Item": "Hospitalization", "Cost ($/year)": 4000.0, "Distribution": "Gamma", "SE/SD": 600.0},
+             {"State": s2, "Subgroup": "Non-Medical", "Item": "Rehab", "Cost ($/year)": 500.0, "Distribution": "Gamma", "SE/SD": 75.0},
+             {"State": s2, "Subgroup": "Indirect", "Item": "Work lost", "Cost ($/year)": 500.0, "Distribution": "Normal", "SE/SD": 50.0},
          ])
     else:
          return pd.DataFrame([
-             {"State": "Well", "Subgroup": "Medical", "Item": "New Intervention", "Cost ($/year)": 2000.0, "Distribution": "Gamma", "SE/SD": 300.0},
-             {"State": "Well", "Subgroup": "Non-Medical", "Item": "Monitoring", "Cost ($/year)": 250.0, "Distribution": "Gamma", "SE/SD": 30.0},
-             {"State": "Well", "Subgroup": "Indirect", "Item": "Time lost", "Cost ($/year)": 250.0, "Distribution": "Fixed", "SE/SD": 0.0},
-             {"State": "Post-Event", "Subgroup": "Medical", "Item": "Hospitalization", "Cost ($/year)": 4000.0, "Distribution": "Gamma", "SE/SD": 600.0},
-             {"State": "Post-Event", "Subgroup": "Non-Medical", "Item": "Rehab", "Cost ($/year)": 500.0, "Distribution": "Gamma", "SE/SD": 75.0},
-             {"State": "Post-Event", "Subgroup": "Indirect", "Item": "Work lost", "Cost ($/year)": 500.0, "Distribution": "Normal", "SE/SD": 50.0},
+             {"State": s1, "Subgroup": "Medical", "Item": "New Intervention", "Cost ($/year)": 2000.0, "Distribution": "Gamma", "SE/SD": 300.0},
+             {"State": s1, "Subgroup": "Non-Medical", "Item": "Monitoring", "Cost ($/year)": 250.0, "Distribution": "Gamma", "SE/SD": 30.0},
+             {"State": s1, "Subgroup": "Indirect", "Item": "Time lost", "Cost ($/year)": 250.0, "Distribution": "Fixed", "SE/SD": 0.0},
+             {"State": s2, "Subgroup": "Medical", "Item": "Hospitalization", "Cost ($/year)": 4000.0, "Distribution": "Gamma", "SE/SD": 600.0},
+             {"State": s2, "Subgroup": "Non-Medical", "Item": "Rehab", "Cost ($/year)": 500.0, "Distribution": "Gamma", "SE/SD": 75.0},
+             {"State": s2, "Subgroup": "Indirect", "Item": "Work lost", "Cost ($/year)": 500.0, "Distribution": "Normal", "SE/SD": 50.0},
          ])
 
-def df_to_cost_list(df):
-    states = ["Well", "Post-Event", "Dead"]
+def df_to_cost_list(df, states):
     cost_list = []
     subgroups = ["Medical", "Non-Medical", "Indirect"]
     for s in states:
@@ -91,16 +165,22 @@ def df_to_cost_list(df):
         cost_list.append(c_dict)
     return cost_list
 
-st.header("Global Configuration & Parameters")
-with st.expander("⚙️ Open to Set Global Parameters, WTP, and Horizon", expanded=True):
-    col_a, col_b = st.columns(2)
-    with col_a:
-        n_cycles = st.slider("Time Horizon (Years/Cycles)", min_value=1, max_value=50, value=20)
-        wtp = st.number_input("Willingness To Pay (WTP/QALY)", min_value=1000, max_value=250000, value=50000, step=5000)
-        discount_rate = st.slider("Discount Rate", min_value=0.0, max_value=0.10, value=0.03, step=0.01)
-    with col_b:
-        max_wtp_ceac = st.slider("Max WTP on CEAC Plot", min_value=50000, max_value=500000, value=150000, step=10000)
-        n_simulations = st.number_input("Number of Simulations (PSA)", min_value=100, max_value=10000, value=1000, step=100)
+# SIDEBAR: Parameters
+st.sidebar.header("Model Parameters")
+st.sidebar.subheader("Define States")
+state_1 = st.sidebar.text_input("State 1 Name", value="Well")
+state_2 = st.sidebar.text_input("State 2 Name", value="Post-Event")
+state_3 = st.sidebar.text_input("State 3 Name", value="Dead")
+custom_states = [state_1, state_2, state_3]
+
+n_cycles = st.sidebar.slider("Time Horizon (Years/Cycles)", min_value=1, max_value=50, value=20)
+wtp = st.sidebar.number_input("Willingness To Pay (WTP/QALY)", min_value=1000, max_value=250000, value=50000, step=5000)
+discount_rate = st.sidebar.slider("Discount Rate", min_value=0.0, max_value=0.10, value=0.03, step=0.01)
+
+st.sidebar.markdown("---")
+st.sidebar.subheader("Risk Settings (CEAC)")
+max_wtp_ceac = st.sidebar.slider("Max WTP on CEAC Plot", min_value=50000, max_value=500000, value=150000, step=10000)
+n_simulations = st.sidebar.number_input("Number of Simulations (PSA)", min_value=100, max_value=10000, value=1000, step=100)
 
 st.subheader("Dynamic Cost Inputs")
 st.markdown("Add up to 10 lines per state/subgroup! Select a specific statistical distribution for each item's Probabilistic Risk Analysis.")
@@ -109,50 +189,50 @@ tab_sc, tab_ni = st.tabs(["Standard Care Costs", "New Intervention Costs"])
 
 with tab_sc:
     std_cost_df = st.data_editor(
-        get_default_costs('Standard'),
+        get_default_costs('Standard', custom_states),
         num_rows="dynamic",
         use_container_width=True,
         column_config={
-           "State": st.column_config.SelectboxColumn("State", options=["Well", "Post-Event"], required=True),
+           "State": st.column_config.SelectboxColumn("State", options=custom_states[:2], required=True),
            "Subgroup": st.column_config.SelectboxColumn("Subgroup", options=["Medical", "Non-Medical", "Indirect"], required=True),
            "Distribution": st.column_config.SelectboxColumn("Distribution", options=["Gamma", "Lognormal", "Normal", "Uniform", "Triangular", "Beta", "Fixed"], required=True),
         },
-        key="sc_costs"
+        key="sc_costs_" + state_1 + state_2 # cache-break if names change heavily
     )
     
 with tab_ni:
     new_cost_df = st.data_editor(
-        get_default_costs('New'),
+        get_default_costs('New', custom_states),
         num_rows="dynamic",
         use_container_width=True,
         column_config={
-           "State": st.column_config.SelectboxColumn("State", options=["Well", "Post-Event"], required=True),
+           "State": st.column_config.SelectboxColumn("State", options=custom_states[:2], required=True),
            "Subgroup": st.column_config.SelectboxColumn("Subgroup", options=["Medical", "Non-Medical", "Indirect"], required=True),
            "Distribution": st.column_config.SelectboxColumn("Distribution", options=["Gamma", "Normal", "Fixed"], required=True),
         },
-        key="ni_costs"
+        key="ni_costs_" + state_1 + state_2
     )
 
 st.markdown("---")
-st.header("Transition Probabilities & Utilities")
-with st.expander("🔄 Open to Set Transition Probabilities & Utilities", expanded=True):
-    col_std, col_new = st.columns(2)
-    with col_std:
-        st.markdown("#### Standard Care")
-        std_prob_event = st.slider("Prob (Well -> Post-Event)", value=0.10, min_value=0.0, max_value=1.0, key="s1")
-        std_prob_dead_w = st.slider("Prob (Well -> Dead)", value=0.02, min_value=0.0, max_value=1.0, key="s2")
-        std_prob_dead_p = st.slider("Prob (Post-Event -> Dead)", value=0.15, min_value=0.0, max_value=1.0, key="s3")
-        st.markdown("##### Utilities (QALYs)")
-        std_qaly_well = st.number_input("QALY - Well (Std)", value=0.95, min_value=0.0, max_value=1.0)
-        std_qaly_post = st.number_input("QALY - Post-Event (Std)", value=0.75, min_value=0.0, max_value=1.0)
-    with col_new:
-        st.markdown("#### New Intervention")
-        new_prob_event = st.slider("Prob (Well -> Post-Event) ", value=0.05, min_value=0.0, max_value=1.0, key="n5")
-        new_prob_dead_w = st.slider("Prob (Well -> Dead) ", value=0.02, min_value=0.0, max_value=1.0, key="n6")
-        new_prob_dead_p = st.slider("Prob (Post-Event -> Dead) ", value=0.10, min_value=0.0, max_value=1.0, key="n7")
-        st.markdown("##### Utilities (QALYs)")
-        new_qaly_well = st.number_input("QALY - Well (New)", value=0.95, min_value=0.0, max_value=1.0)
-        new_qaly_post = st.number_input("QALY - Post-Event (New)", value=0.80, min_value=0.0, max_value=1.0)
+st.sidebar.subheader("Transition Probabilities")
+st.sidebar.markdown("**Standard Care**")
+std_prob_event = st.sidebar.slider(f"Prob ({state_1} -> {state_2})", value=0.10, min_value=0.0, max_value=1.0, step=0.01, format="%.2f", key="s1")
+std_prob_dead_w = st.sidebar.slider(f"Prob ({state_1} -> {state_3})", value=0.02, min_value=0.0, max_value=1.0, step=0.01, format="%.2f", key="s2")
+std_prob_dead_p = st.sidebar.slider(f"Prob ({state_2} -> {state_3})", value=0.15, min_value=0.0, max_value=1.0, step=0.01, format="%.2f", key="s3")
+
+st.sidebar.markdown("**New Intervention**")
+new_prob_event = st.sidebar.slider(f"Prob ({state_1} -> {state_2})", value=0.05, min_value=0.0, max_value=1.0, step=0.01, format="%.2f", key="n5")
+new_prob_dead_w = st.sidebar.slider(f"Prob ({state_1} -> {state_3})", value=0.02, min_value=0.0, max_value=1.0, step=0.01, format="%.2f", key="n6")
+new_prob_dead_p = st.sidebar.slider(f"Prob ({state_2} -> {state_3})", value=0.10, min_value=0.0, max_value=1.0, step=0.01, format="%.2f", key="n7")
+
+st.sidebar.subheader("Utilities (QALYs)")
+st.sidebar.markdown("**Standard Care**")
+std_qaly_well = st.sidebar.number_input(f"QALY - {state_1} (Std)", value=0.95, min_value=0.0, max_value=1.0, step=0.01, format="%.2f")
+std_qaly_post = st.sidebar.number_input(f"QALY - {state_2} (Std)", value=0.75, min_value=0.0, max_value=1.0, step=0.01, format="%.2f")
+
+st.sidebar.markdown("**New Intervention**")
+new_qaly_well = st.sidebar.number_input(f"QALY - {state_1} (New)", value=0.95, min_value=0.0, max_value=1.0, step=0.01, format="%.2f")
+new_qaly_post = st.sidebar.number_input(f"QALY - {state_2} (New)", value=0.80, min_value=0.0, max_value=1.0, step=0.01, format="%.2f")
 
 def build_p_matrix(p_event, p_dead_w, p_dead_p):
     p_well = max(0, 1 - p_event - p_dead_w)
@@ -165,14 +245,14 @@ def build_p_matrix(p_event, p_dead_w, p_dead_p):
 
 std_params = {
     'p_matrix': build_p_matrix(std_prob_event, std_prob_dead_w, std_prob_dead_p),
-    'costs': df_to_cost_list(std_cost_df),
+    'costs': df_to_cost_list(std_cost_df, custom_states),
     'cost_df': std_cost_df, # pass to PSA
     'utilities': [std_qaly_well, std_qaly_post, 0.0]
 }
 
 new_params = {
     'p_matrix': build_p_matrix(new_prob_event, new_prob_dead_w, new_prob_dead_p),
-    'costs': df_to_cost_list(new_cost_df),
+    'costs': df_to_cost_list(new_cost_df, custom_states),
     'cost_df': new_cost_df,
     'utilities': [new_qaly_well, new_qaly_post, 0.0]
 }
@@ -183,19 +263,84 @@ st.header("Base Case Analysis")
 res = compare_strategies(std_params, new_params, n_cycles, wtp, discount_rate)
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Standard Care Cost", f"${res['std_cost']:,.0f}")
-col2.metric("New Intervention Cost", f"${res['new_cost']:,.0f}")
-col3.metric("Incremental Cost", f"${res['inc_cost']:,.0f}")
+
+def render_metric(label, value, condition_val=None):
+    # Minimal pastel styling with colored accent borders
+    bg = "#ffffff"
+    border = "#f1f5f9"
+    text_color = "#1e293b"
+    label_color = "#64748b"
+    trend_html = ""
+    accent = "#cbd5e1"
+    
+    if "Standard" in label:
+        bg = "#f8fafc" # Slate
+        border = "#e2e8f0"
+        accent = "#94a3b8"
+    elif "New Intervention" in label:
+        bg = "#eff6ff" # Blue
+        border = "#dbeafe"
+        accent = "#60a5fa"
+    elif "Incremental" in label:
+        bg = "#fefce8" # Yellow
+        border = "#fef08a"
+        accent = "#facc15"
+    elif "ICER" in label:
+        bg = "#faf5ff" # Purple
+        border = "#e9d5ff"
+        accent = "#c084fc"
+
+    if condition_val is not None and condition_val < 0:
+        bg = "#fef2f2"
+        border = "#fecaca"
+        accent = "#f87171"
+        text_color = "#991b1b"
+        trend_html = """<div style="font-size: 0.8rem; color: #ef4444; font-weight: 600; margin-top: 8px;">Negative Outcome</div>"""
+    elif condition_val is not None:
+        bg = "#ecfdf5"
+        border = "#a7f3d0"
+        accent = "#34d399"
+        text_color = "#065f46"
+        trend_html = """<div style="font-size: 0.8rem; color: #10b981; font-weight: 600; margin-top: 8px;">Favorable Outcome</div>"""
+
+    return f"""
+    <div style="
+        background-color: {bg}; 
+        border-radius: 12px; 
+        padding: 24px; 
+        border: 1px solid {border}; 
+        border-top: 4px solid {accent};
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); 
+        margin-bottom: 1rem;
+    ">
+        <div style="color: {label_color}; font-size: 0.95rem; font-weight: 600; margin-bottom: 8px;">{label}</div>
+        <div style="color: {text_color}; font-size: 2.2rem; font-weight: 700; line-height: 1.2;">{value}</div>
+        {trend_html}
+    </div>
+    """
+
+col1.markdown(render_metric("Standard Care Cost", f"${res['std_cost']:,.0f}"), unsafe_allow_html=True)
+col2.markdown(render_metric("New Intervention Cost", f"${res['new_cost']:,.0f}"), unsafe_allow_html=True)
+col3.markdown(render_metric("Incremental Cost", f"${res['inc_cost']:,.0f}"), unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Standard Care QALYs", f"{res['std_qaly']:,.2f}")
-col2.metric("New Intervention QALYs", f"{res['new_qaly']:,.2f}")
-col3.metric("Incremental QALYs", f"{res['inc_qaly']:,.2f}")
+col1.markdown(render_metric("Standard Care QALYs", f"{res['std_qaly']:,.2f}"), unsafe_allow_html=True)
+col2.markdown(render_metric("New Intervention QALYs", f"{res['new_qaly']:,.2f}"), unsafe_allow_html=True)
+col3.markdown(render_metric("Incremental QALYs", f"{res['inc_qaly']:,.2f}", res['inc_qaly']), unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3)
-col1.metric("ICER ($/QALY)", f"${res['icer']:,.0f}" if res['icer'] != float('inf') else "Dominated")
-col2.metric("Incremental NMB (INMB)", f"${res['inmb']:,.0f}")
-col3.markdown(f"**Decision:** {'Cost-Effective' if res['inmb'] > 0 else 'Not Cost-Effective'}")
+icer_str = f"${res['icer']:,.0f}" if res['icer'] != float('inf') else "Dominated"
+col1.markdown(render_metric("ICER ($/QALY)", icer_str), unsafe_allow_html=True)
+col2.markdown(render_metric("Incremental NMB (INMB)", f"${res['inmb']:,.0f}", res['inmb']), unsafe_allow_html=True)
+
+desc_color = "#166534" if res['inmb'] > 0 else "#991b1b"
+desc_text = "Cost-Effective" if res['inmb'] > 0 else "Not Cost-Effective"
+col3.markdown(f'''
+<div style="padding-top: 2.5rem;">
+    <span style="font-weight:600; color:#475569; font-size:1.1rem;">Decision: </span>
+    <span style="font-weight:700; color:{desc_color}; font-size:1.1rem;">{desc_text}</span>
+</div>
+''', unsafe_allow_html=True)
 
 st.subheader("Cost Distribution")
 col_chart, col_text = st.columns([1, 1])
@@ -272,14 +417,14 @@ if 'psa_df' in st.session_state:
     tab1, tab2, tab3 = st.tabs(["Cost-Effectiveness Acceptability Curve", "Cost-Effectiveness Plane", "NMB Distribution"])
     
     with tab1:
-        st.pyplot(plot_ceac(psa_df, max_wtp_ceac))
+        st.plotly_chart(plot_ceac(psa_df, max_wtp_ceac), use_container_width=True)
         st.markdown(f"Shows the probability that each strategy is cost-effective from $0 to user-selected ${max_wtp_ceac:,.0f} WTP.")
         
     with tab2:
         st.pyplot(plot_ce_plane(psa_df, wtp))
         
     with tab3:
-        st.pyplot(plot_inmb_distribution(psa_df))
+        st.plotly_chart(plot_inmb_distribution(psa_df), use_container_width=True)
         prob_ce = (psa_df['INMB'] > 0).mean()
         st.info(f"**Probability Cost-Effective (INMB > 0):** {prob_ce*100:.1f}%")
 
@@ -288,7 +433,7 @@ st.header("Export Native Formula-Driven Excel Model")
 st.markdown("We automatically generate the actual `.xlsx` workbook containing your dynamic line-item costs inserted directly into standard Excel formulas for traceability and auditing.")
 
 from generate_excel_model import create_excel_model
-create_excel_model(std_params, new_params, n_cycles, wtp, discount_rate, filename="Formula_CEA_Model.xlsx")
+create_excel_model(std_params, new_params, n_cycles, wtp, discount_rate, custom_states, filename="Formula_CEA_Model.xlsx")
 
 with open("Formula_CEA_Model.xlsx", "rb") as f:
     st.download_button(

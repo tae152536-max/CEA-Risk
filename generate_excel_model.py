@@ -1,7 +1,8 @@
 import xlsxwriter
 import sys
 
-def create_excel_model(std_params, new_params, n_cycles, wtp, discount_rate, filename="Formula_CEA_Model.xlsx"):
+def create_excel_model(std_params, new_params, n_cycles, wtp, discount_rate, states=["Well", "Post-Event", "Dead"], filename="Formula_CEA_Model.xlsx"):
+    s1, s2, s3 = states
     workbook = xlsxwriter.Workbook(filename)
     
     # Formats
@@ -25,23 +26,23 @@ def create_excel_model(std_params, new_params, n_cycles, wtp, discount_rate, fil
     # --- Standard Care ---
     ws_in.write('A6', 'Standard Care Parameters', bold)
     ws_in.write('A7', 'State utilities')
-    ws_in.write('B7', 'Well:', bold)
+    ws_in.write('B7', f'{s1}:', bold)
     ws_in.write_number('C7', std_params['utilities'][0], dec)
-    ws_in.write('B8', 'Post-Event:', bold)
+    ws_in.write('B8', f'{s2}:', bold)
     ws_in.write_number('C8', std_params['utilities'][1], dec)
     
-    ws_in.write('A10', 'Transition Probabilities (Well)')
-    ws_in.write('B10', '-> Post-Event')
+    ws_in.write('A10', f'Transition Probabilities ({s1})')
+    ws_in.write('B10', f'-> {s2}')
     ws_in.write_number('C10', std_params['p_matrix'][0][1], perc)
-    ws_in.write('B11', '-> Dead')
+    ws_in.write('B11', f'-> {s3}')
     ws_in.write_number('C11', std_params['p_matrix'][0][2], perc)
-    ws_in.write('B12', '-> Well (calculated)')
+    ws_in.write('B12', f'-> {s1} (calculated)')
     ws_in.write_formula('C12', '=1-C10-C11', perc)
     
-    ws_in.write('A14', 'Transition Probabilities (Post-Event)')
-    ws_in.write('B14', '-> Dead')
+    ws_in.write('A14', f'Transition Probabilities ({s2})')
+    ws_in.write('B14', f'-> {s3}')
     ws_in.write_number('C14', std_params['p_matrix'][1][2], perc)
-    ws_in.write('B15', '-> Post-Event (calculated)')
+    ws_in.write('B15', f'-> {s2} (calculated)')
     ws_in.write_formula('C15', '=1-C14', perc)
     
     # Dynamic Costs - Standard
@@ -58,15 +59,15 @@ def create_excel_model(std_params, new_params, n_cycles, wtp, discount_rate, fil
         std_cost_rows.append(row+1) # 1-indexed for Excel
         row += 1
         
-    std_well_cost_cells = [f"E{r}" for r, s in zip(std_cost_rows, std_params['cost_df']['State']) if s == 'Well']
-    std_pe_cost_cells = [f"E{r}" for r, s in zip(std_cost_rows, std_params['cost_df']['State']) if s == 'Post-Event']
+    std_well_cost_cells = [f"E{r}" for r, s in zip(std_cost_rows, std_params['cost_df']['State']) if s == s1]
+    std_pe_cost_cells = [f"E{r}" for r, s in zip(std_cost_rows, std_params['cost_df']['State']) if s == s2]
     
-    ws_in.write(row, 0, 'Total Well Cost', bold)
+    ws_in.write(row, 0, f'Total {s1} Cost', bold)
     ws_in.write_formula(row, 4, f"=SUM({','.join(std_well_cost_cells) if std_well_cost_cells else '0'})", money)
     std_well_cost_cell = f"Inputs!E{row+1}"
     row += 1
     
-    ws_in.write(row, 0, 'Total Post-Event Cost', bold)
+    ws_in.write(row, 0, f'Total {s2} Cost', bold)
     ws_in.write_formula(row, 4, f"=SUM({','.join(std_pe_cost_cells) if std_pe_cost_cells else '0'})", money)
     std_pe_cost_cell = f"Inputs!E{row+1}"
     row += 2
@@ -74,23 +75,23 @@ def create_excel_model(std_params, new_params, n_cycles, wtp, discount_rate, fil
     # --- New Intervention ---
     ws_in.write(row, 0, 'New Intervention Parameters', bold)
     ws_in.write(row+1, 0, 'State utilities')
-    ws_in.write(row+1, 1, 'Well:', bold)
+    ws_in.write(row+1, 1, f'{s1}:', bold)
     ws_in.write_number(row+1, 2, new_params['utilities'][0], dec)
-    ws_in.write(row+2, 1, 'Post-Event:', bold)
+    ws_in.write(row+2, 1, f'{s2}:', bold)
     ws_in.write_number(row+2, 2, new_params['utilities'][1], dec)
     
-    ws_in.write(row+4, 0, 'Transition Probabilities (Well)')
-    ws_in.write(row+4, 1, '-> Post-Event')
+    ws_in.write(row+4, 0, f'Transition Probabilities ({s1})')
+    ws_in.write(row+4, 1, f'-> {s2}')
     ws_in.write_number(row+4, 2, new_params['p_matrix'][0][1], perc)
-    ws_in.write(row+5, 1, '-> Dead')
+    ws_in.write(row+5, 1, f'-> {s3}')
     ws_in.write_number(row+5, 2, new_params['p_matrix'][0][2], perc)
-    ws_in.write(row+6, 1, '-> Well (calculated)')
+    ws_in.write(row+6, 1, f'-> {s1} (calculated)')
     ws_in.write_formula(row+6, 2, f'=1-C{row+5}-C{row+6}', perc)
     
-    ws_in.write(row+8, 0, 'Transition Probabilities (Post-Event)')
-    ws_in.write(row+8, 1, '-> Dead')
+    ws_in.write(row+8, 0, f'Transition Probabilities ({s2})')
+    ws_in.write(row+8, 1, f'-> {s3}')
     ws_in.write_number(row+8, 2, new_params['p_matrix'][1][2], perc)
-    ws_in.write(row+9, 1, '-> Post-Event (calculated)')
+    ws_in.write(row+9, 1, f'-> {s2} (calculated)')
     ws_in.write_formula(row+9, 2, f'=1-C{row+9}', perc)
     
     row += 11
@@ -106,13 +107,13 @@ def create_excel_model(std_params, new_params, n_cycles, wtp, discount_rate, fil
         new_cost_rows.append(row+1)
         row += 1
         
-    new_well_cost_cells = [f"E{r}" for r, s in zip(new_cost_rows, new_params['cost_df']['State']) if s == 'Well']
-    new_pe_cost_cells = [f"E{r}" for r, s in zip(new_cost_rows, new_params['cost_df']['State']) if s == 'Post-Event']
-    ws_in.write(row, 0, 'Total Well Cost', bold)
+    new_well_cost_cells = [f"E{r}" for r, s in zip(new_cost_rows, new_params['cost_df']['State']) if s == s1]
+    new_pe_cost_cells = [f"E{r}" for r, s in zip(new_cost_rows, new_params['cost_df']['State']) if s == s2]
+    ws_in.write(row, 0, f'Total {s1} Cost', bold)
     ws_in.write_formula(row, 4, f"=SUM({','.join(new_well_cost_cells) if new_well_cost_cells else '0'})", money)
     new_well_cost_cell = f"Inputs!E{row+1}"
     row += 1
-    ws_in.write(row, 0, 'Total Post-Event Cost', bold)
+    ws_in.write(row, 0, f'Total {s2} Cost', bold)
     ws_in.write_formula(row, 4, f"=SUM({','.join(new_pe_cost_cells) if new_pe_cost_cells else '0'})", money)
     new_pe_cost_cell = f"Inputs!E{row+1}"
     row += 2
@@ -122,7 +123,7 @@ def create_excel_model(std_params, new_params, n_cycles, wtp, discount_rate, fil
     # ----------------------------------------------------
     ws_tr = workbook.add_worksheet('Markov Trace')
     ws_tr.write('A1', 'Standard Care', bold)
-    ws_tr.write_row('A2', ['Cycle', 'Well', 'Post-Event', 'Dead', 'Undiscounted Cost ($)', 'Undiscounted QALYs'], bold)
+    ws_tr.write_row('A2', ['Cycle', s1, s2, s3, 'Undiscounted Cost ($)', 'Undiscounted QALYs'], bold)
     
     # Cycle 0
     ws_tr.write_number('A3', 0)
