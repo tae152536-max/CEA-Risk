@@ -10,7 +10,7 @@ import importlib
 importlib.reload(visualizations)
 from visualizations import plot_ce_plane, plot_ceac, plot_inmb_distribution, plot_cost_breakdown, plot_tornado
 
-st.set_page_config(page_title="Generic N-State Model", layout="wide")
+st.set_page_config(page_title="Generic N-State Model", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
 <style>

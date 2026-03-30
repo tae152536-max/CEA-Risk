@@ -10,7 +10,7 @@ importlib.reload(visualizations)
 from visualizations import plot_ce_plane, plot_ceac, plot_inmb_distribution, plot_cost_breakdown, plot_tornado
 # Note: Excel export logic moved to generate_excel_model.py for deep formula support
 
-st.set_page_config(page_title="Cardiovascular CEA Model", layout="wide")
+st.set_page_config(page_title="Cardiovascular CEA Model", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
 <style>
@@ -19,7 +19,6 @@ st.markdown("""
     
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    header {visibility: hidden;}
     .block-container { padding-top: 2rem; padding-bottom: 2rem; }
     
     [data-testid="stSidebar"] { background-color: #f8f9fa !important; border-right: 1px solid #e9ecef; }
